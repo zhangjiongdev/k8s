@@ -1,6 +1,6 @@
-server1:30.0.2.11
-server2:30.0.2.12
-server3:30.0.2.13
+# server1:30.0.2.11
+# server2:30.0.2.12
+# server3:30.0.2.13
 
 ETCD_VER=v3.3.13
 
@@ -28,9 +28,6 @@ rm -rf /tmp/etcd-download-test/
 # ETCDCTL_API=3
 
 
-mkdir -p /var/log/etcd/
-mkdir -p /data/etcd/
-
 
 curl https://discovery.etcd.io/new?size=3
 # https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
@@ -38,6 +35,10 @@ curl https://discovery.etcd.io/new?size=3
 
 
 # server1
+
+mkdir -p /var/log/etcd/
+mkdir -p /data/etcd/
+
 /usr/local/bin/etcd --name etcd1 --data-dir /data/etcd \
 --initial-advertise-peer-urls http://30.0.2.11:2380 \
 --listen-peer-urls http://30.0.2.11:2380 \
@@ -46,6 +47,10 @@ curl https://discovery.etcd.io/new?size=3
 --discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
 
 #server2
+
+mkdir -p /var/log/etcd/
+mkdir -p /data/etcd/
+
 /usr/local/bin/etcd --name etcd2 --data-dir /data/etcd \
 --initial-advertise-peer-urls http://30.0.2.12:2380 \
 --listen-peer-urls http://30.0.2.12:2380 \
@@ -54,6 +59,10 @@ curl https://discovery.etcd.io/new?size=3
 --discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
 
 #server3
+
+mkdir -p /var/log/etcd/
+mkdir -p /data/etcd/
+
 /usr/local/bin/etcd --name etcd3 --data-dir /data/etcd \
 --initial-advertise-peer-urls http://30.0.2.13:2380 \
 --listen-peer-urls http://30.0.2.13:2380 \
@@ -62,6 +71,6 @@ curl https://discovery.etcd.io/new?size=3
 --discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
 
 
-# check
+# check server1
 /usr/local/bin/etcdctl member list
 /usr/local/bin/etcdctl cluster-health
