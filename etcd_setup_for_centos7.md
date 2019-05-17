@@ -1,10 +1,10 @@
-# # # # # # # # # # # # #  
-# 只是文档，不是一键安装  #
-# # # # # # # # # # # # # 
+#------------------------
+#只是文档，不是一键安装  #
+#------------------------
 
-# server1:30.0.2.11
-# server2:30.0.2.12
-# server3:30.0.2.13
+#server1:30.0.2.11
+#server2:30.0.2.12
+#server3:30.0.2.13
 
 ETCD_VER=v3.3.13
 
@@ -29,16 +29,16 @@ rm -rf /tmp/etcd-download-test/
 /usr/local/bin/etcd --version
 /usr/local/bin/etcdctl --version
 
-# ETCDCTL_API=3
+#ETCDCTL_API=3
 
 
 
 curl https://discovery.etcd.io/new?size=3
-# https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+#https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
 
 
 
-# server1
+#server1
 
 mkdir -p /var/log/etcd/
 mkdir -p /data/etcd/
