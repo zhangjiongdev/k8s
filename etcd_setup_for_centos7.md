@@ -1,11 +1,15 @@
-#------------------------
-#只是文档，不是一键安装  #
-#------------------------
+> 只是文档，不是一键安装
 
-#server1:30.0.2.11
-#server2:30.0.2.12
-#server3:30.0.2.13
 
+
+
+
+
+> *server1:30.0.2.11<br>server2:30.0.2.12 <br>server3:30.0.2.13*
+
+
+> server1~3
+```
 ETCD_VER=v3.3.13
 
 GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
@@ -20,7 +24,6 @@ tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd-download-test --s
 
 rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
 
-
 cp /tmp/etcd-download-test/etcd /usr/local/bin/
 cp /tmp/etcd-download-test/etcdctl /usr/local/bin/
 
@@ -28,18 +31,17 @@ rm -rf /tmp/etcd-download-test/
 
 /usr/local/bin/etcd --version
 /usr/local/bin/etcdctl --version
+```
 
+```
 #ETCDCTL_API=3
-
-
-
 curl https://discovery.etcd.io/new?size=3
 #https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+```
 
 
-
-#server1
-
+**server1**
+```
 mkdir -p /var/log/etcd/
 mkdir -p /data/etcd/
 
@@ -49,9 +51,10 @@ mkdir -p /data/etcd/
 --listen-client-urls http://30.0.2.11:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://30.0.2.11:2379 \
 --discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+```
 
-#server2
-
+**server2**
+```
 mkdir -p /var/log/etcd/
 mkdir -p /data/etcd/
 
@@ -61,9 +64,10 @@ mkdir -p /data/etcd/
 --listen-client-urls http://30.0.2.12:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://30.0.2.12:2379 \
 --discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+```
 
-#server3
-
+**server3**
+```
 mkdir -p /var/log/etcd/
 mkdir -p /data/etcd/
 
@@ -73,8 +77,10 @@ mkdir -p /data/etcd/
 --listen-client-urls http://30.0.2.13:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://30.0.2.13:2379 \
 --discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+```
 
-
-# check server1
+**check server1**
+```
 /usr/local/bin/etcdctl member list
 /usr/local/bin/etcdctl cluster-health
+```
