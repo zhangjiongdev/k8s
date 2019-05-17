@@ -8,7 +8,7 @@
 > *server1:30.0.2.11<br>server2:30.0.2.12 <br>server3:30.0.2.13*
 
 
-> server1~3
+server 1~3
 ```
 ETCD_VER=v3.3.13
 
