@@ -1,3 +1,8 @@
+*搭建ETCD所需要的私有的自动发现服务
+
+>由于服务本身也依赖ETCD，所以可以先搭建一个静态发现的ETCD，或者使用公共的自动发现地址
+
+
 **下载镜像**
 ```
 docker pull quay.io/coreos/discovery.etcd.io
