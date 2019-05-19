@@ -50,7 +50,7 @@ mkdir -p /data/etcd/
 --listen-peer-urls http://30.0.2.11:2380 \
 --listen-client-urls http://30.0.2.11:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://30.0.2.11:2379 \
---discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+--discovery https://discovery.etcd.io/ecaf8023219eb194ba5b7afc31c03388
 ```
 
 **server2**
@@ -63,7 +63,7 @@ mkdir -p /data/etcd/
 --listen-peer-urls http://30.0.2.12:2380 \
 --listen-client-urls http://30.0.2.12:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://30.0.2.12:2379 \
---discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+--discovery https://discovery.etcd.io/ecaf8023219eb194ba5b7afc31c03388
 ```
 
 **server3**
@@ -76,7 +76,7 @@ mkdir -p /data/etcd/
 --listen-peer-urls http://30.0.2.13:2380 \
 --listen-client-urls http://30.0.2.13:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://30.0.2.13:2379 \
---discovery https://discovery.etcd.io/43410f7029583f9d3f9e5bc1d64511e5
+--discovery https://discovery.etcd.io/ecaf8023219eb194ba5b7afc31c03388
 ```
 
 **check server1**
