@@ -90,5 +90,5 @@ mkdir -p /data/etcd/
 ```
 ETCDCTL_API=3 /usr/local/bin/etcdctl put test hello
 
-ETCDCTL_API=3 etcdctl get test
+ETCDCTL_API=3 /usr/local/bin/etcdctl get test
 ```
