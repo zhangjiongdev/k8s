@@ -84,3 +84,11 @@ mkdir -p /data/etcd/
 /usr/local/bin/etcdctl member list
 /usr/local/bin/etcdctl cluster-health
 ```
+
+
+**data test**
+```
+ETCDCTL_API=3 /usr/local/bin/etcdctl put test hello
+
+ETCDCTL_API=3 etcdctl get test
+```
