@@ -160,6 +160,12 @@
     scp /etc/kubernetes/pki/etcd/ca.* root@MASTER2:/etc/kubernetes/pki/etcd/
     scp /etc/kubernetes/admin.conf root@MASTER2:/etc/kubernetes/
     ```
+- 重启kubelet
+    - 30.0.2.12
+    ```
+    systemctl restart kubelet
+    ```
+
 - 加入集群
     - 30.0.2.12
     ```
