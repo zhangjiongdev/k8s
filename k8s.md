@@ -174,9 +174,6 @@
 
 - 返回信息
 ```
-kubeadm join 30.0.2.11:6443 --token 6wgxjf.8l7xdbbupwnbnf7z --discovery-token-ca-cert-hash sha256:b34e72280355492d4ff59b741c260838939d880d694e58853a97a95091b06f98 --experimental-control-plane
-
-
 [preflight] Running pre-flight checks
 	[WARNING IsDockerSystemdCheck]: detected "cgroupfs" as the Docker cgroup driver. The recommended driver is "systemd". Please follow the guide at https://kubernetes.io/docs/setup/cri/
 [preflight] Reading configuration from the cluster...
