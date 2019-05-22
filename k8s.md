@@ -171,3 +171,22 @@
     ```
     kubeadm join 30.0.2.11:6443 --token 6wgxjf.8l7xdbbupwnbnf7z --discovery-token-ca-cert-hash sha256:b34e72280355492d4ff59b741c260838939d880d694e58853a97a95091b06f98 --experimental-control-plane
     ```
+
+- 返回信息
+```
+kubeadm join 30.0.2.11:6443 --token 6wgxjf.8l7xdbbupwnbnf7z --discovery-token-ca-cert-hash sha256:b34e72280355492d4ff59b741c260838939d880d694e58853a97a95091b06f98 --experimental-control-plane
+
+
+[preflight] Running pre-flight checks
+	[WARNING IsDockerSystemdCheck]: detected "cgroupfs" as the Docker cgroup driver. The recommended driver is "systemd". Please follow the guide at https://kubernetes.io/docs/setup/cri/
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -oyaml'
+error execution phase preflight: 
+One or more conditions for hosting a new control plane instance is not satisfied.
+
+unable to add a new control plane instance a cluster that doesn't have a stable controlPlaneEndpoint address
+
+Please ensure that:
+* The cluster has a stable controlPlaneEndpoint address.
+* The certificates that must be shared among control plane instances are provided.
+```
