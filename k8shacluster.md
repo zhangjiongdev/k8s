@@ -302,6 +302,18 @@ cat >>/etc/hosts<<EOF
 30.0.2.14 NODE1
 EOF
 ```
+#### 3. 
+```
+mkdir -p /etc/kubernetes/pki/etcd
+scp root@master1:/etc/kubernetes/pki/ca.* /etc/kubernetes/pki/
+scp root@master1:/etc/kubernetes/pki/sa.* /etc/kubernetes/pki/
+scp root@master1:/etc/kubernetes/pki/front-proxy-ca.* /etc/kubernetes/pki/
+scp root@master1:/etc/kubernetes/pki/etcd/ca.* /etc/kubernetes/pki/etcd/
+
+mkdir -p $HOME/.kube
+scp root@master1:$HOME/.kube/config $HOME/.kube/config
+```
+
 #### 4. 
 ```
 mkdir /root/.ssh
