@@ -270,7 +270,7 @@ wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-
 ```
 ##### 26. 
 ```
-kubectl apply -f kube-flannel.yaml
+kubectl apply -f kube-flannel.yml
 ```
 ##### 27. 
 ```
@@ -304,9 +304,9 @@ EOF
 ```
 #### 4. 
 ```
-mkdir .ssh
-chmod 700 .ssh
-scp root@t1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+mkdir /root/.ssh
+chmod 700 /root/.ssh
+scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
 #### 5. 
 ```
