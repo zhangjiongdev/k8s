@@ -16,7 +16,7 @@ cat >>/etc/hosts<<EOF
 30.0.2.14 NODE1
 EOF
 ```
-#### 3. 生成密钥
+#### 3. 生成公钥与私钥对
 ```
 ssh-keygen -t rsa
 ```
