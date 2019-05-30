@@ -358,17 +358,18 @@ mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
 ```
 ##### 11. 
 ```
+nodename=`/bin/hostname`
 cat >/etc/keepalived/keepalived.conf<<END4
 ! Configuration File for keepalived
 global_defs {
-   router_id MASTER2
+   router_id ${nodename}
 }
 vrrp_instance VI_1 {
     state MASTER
     interface enp0s3
     virtual_router_id 88
     advert_int 1
-    priority 100         
+    priority 100
     authentication {
         auth_type PASS
         auth_pass 1111
