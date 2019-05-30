@@ -20,12 +20,12 @@ EOF
 ```
 ssh-keygen -t rsa
 ```
-#### 4. 
-```
-ssh-copy-id MASTER2
-ssh-copy-id MASTER3
-ssh-copy-id NODE1
-```
+      #### 4. 
+      ```
+      ssh-copy-id MASTER2
+      ssh-copy-id MASTER3
+      ssh-copy-id NODE1
+      ```
 #### 5. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
