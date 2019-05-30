@@ -64,10 +64,11 @@ mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
 ```
 ##### 11. 
 ```
+nodename=`/bin/hostname`
 cat >/etc/keepalived/keepalived.conf<<END4
 ! Configuration File for keepalived
 global_defs {
-   router_id MASTER1
+   router_id ${nodename}
 }
 vrrp_instance VI_1 {
     state MASTER
