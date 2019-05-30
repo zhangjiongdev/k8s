@@ -301,6 +301,12 @@ cat >>/etc/hosts<<EOF
 30.0.2.14 NODE1
 EOF
 ```
+#### 4. 
+```
+mkdir .ssh
+chmod 700 .ssh
+scp root@t1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+```
 #### 5. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
@@ -484,6 +490,12 @@ cat >>/etc/hosts<<EOF
 30.0.2.13 MASTER3
 30.0.2.14 NODE1
 EOF
+```
+#### 4. 
+```
+mkdir .ssh
+chmod 700 .ssh
+scp root@t1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
 #### 5. 
 ```
