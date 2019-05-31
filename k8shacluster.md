@@ -309,6 +309,7 @@ scp root@master1:/etc/kubernetes/pki/ca.* /etc/kubernetes/pki/
 scp root@master1:/etc/kubernetes/pki/sa.* /etc/kubernetes/pki/
 scp root@master1:/etc/kubernetes/pki/front-proxy-ca.* /etc/kubernetes/pki/
 scp root@master1:/etc/kubernetes/pki/etcd/ca.* /etc/kubernetes/pki/etcd/
+scp root@master1:/etc/kubernetes/admin.conf /etc/kubernetes/
 
 mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
