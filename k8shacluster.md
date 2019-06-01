@@ -1,7 +1,7 @@
 # 前言
 本文档以3台master节点+1台node节点为例
 
-# MASTER1
+# master1
 #### 1. 关闭swap
 ```
 echo 'swapoff -a' >> /etc/profile
@@ -10,10 +10,10 @@ source /etc/profile
 #### 2. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
-30.0.2.11 MASTER1
-30.0.2.12 MASTER2
-30.0.2.13 MASTER3
-30.0.2.14 NODE1
+30.0.2.11 master1
+30.0.2.12 master2
+30.0.2.13 master3
+30.0.2.14 node1
 EOF
 ```
 #### 3. 生成公钥与私钥对
@@ -194,7 +194,7 @@ localAPIEndpoint:
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
-  name: MASTER1
+  name: master1
   taints:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
@@ -296,10 +296,10 @@ source /etc/profile
 #### 2. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
-30.0.2.11 MASTER1
-30.0.2.12 MASTER2
-30.0.2.13 MASTER3
-30.0.2.14 NODE1
+30.0.2.11 master1
+30.0.2.12 master2
+30.0.2.13 master3
+30.0.2.14 node1
 EOF
 ```
 #### 3. 
