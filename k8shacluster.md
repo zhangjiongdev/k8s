@@ -370,7 +370,7 @@ vrrp_instance VI_1 {
     interface enp0s3
     virtual_router_id 88
     advert_int 1
-    priority 100
+    priority 90
     authentication {
         auth_type PASS
         auth_pass 1111
