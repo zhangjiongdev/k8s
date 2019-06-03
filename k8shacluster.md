@@ -522,9 +522,9 @@ EOF
 ```
 #### 4. 
 ```
-mkdir .ssh
-chmod 700 .ssh
-scp root@t1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+mkdir /root/.ssh
+chmod 700 /root/.ssh
+scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
 #### 5. 
 ```
@@ -552,7 +552,7 @@ EOF
 ```
 #### 8. 
 ```
-chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod \| grep -e ip_vs -e nf_conntrack_ipv4
+chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 ```
 
 ##### 15. 
@@ -593,11 +593,13 @@ EOF
 ```
 yum makecache fast
 yum install -y kubelet kubeadm kubectl
+
 ```
 
 ##### 18. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
+
 ```
 ##### 19. 
 ```
@@ -606,6 +608,10 @@ systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 
 ##### 23. 
 ```
+mkdir -p $HOME/.kube
+scp root@master1:$HOME/.kube/config $HOME/.kube/config
+
+
 kubectl get cs
 kubectl get pod --all-namespaces -o wide
 ```
