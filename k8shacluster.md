@@ -1,4 +1,4 @@
-## 基于 kubeadm 搭建 kubernetes ha 集群
+## 基于 kubeadm 搭建 Kubernetes HA 集群
 
 供学习测试使用
 
