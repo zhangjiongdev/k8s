@@ -1,3 +1,8 @@
+## 基于 kubeadm 搭建 kubernetes ha 集群
+
+供学习测试使用
+
+
 # 前言
 本文档以3台master节点+1台node节点为例
 详细如下：
