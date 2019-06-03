@@ -346,9 +346,7 @@ scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 #### 3. 
 ```
 mkdir -p /etc/kubernetes/pki/etcd
-scp root@master1:/etc/kubernetes/pki/ca.* /etc/kubernetes/pki/
-scp root@master1:/etc/kubernetes/pki/sa.* /etc/kubernetes/pki/
-scp root@master1:/etc/kubernetes/pki/front-proxy-ca.* /etc/kubernetes/pki/
+scp root@master1:/etc/kubernetes/pki/\{ca.*,sa.*,front-proxy-ca.*\} /etc/kubernetes/pki/
 scp root@master1:/etc/kubernetes/pki/etcd/ca.* /etc/kubernetes/pki/etcd/
 scp root@master1:/etc/kubernetes/admin.conf /etc/kubernetes/
 
@@ -485,9 +483,14 @@ echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/s
 
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 
+
+
 ```
 ##### 27. 
 ```
+
+kubeadm join ...
+
 kubectl get cs
 kubectl get nodes
 kubectl -n kube-system get pod -o wide
