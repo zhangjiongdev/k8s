@@ -1,7 +1,40 @@
 # 前言
 本文档以3台master节点+1台node节点为例
+详细如下：
+```
+30.0.2.11 master1
+30.0.2.12 master2
+30.0.2.13 master3
+30.0.2.14 node1
+```
 
 # master1
+##### 
+```
+yum install -y wget
+```
+
+##### 15. 
+```
+MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
+
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10
+docker pull ${MY_REGISTRY}/k8s-gcr-io-pause:3.1
+docker pull ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1
+
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2 k8s.gcr.io/kube-apiserver:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2 k8s.gcr.io/kube-controller-manager:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2 k8s.gcr.io/kube-scheduler:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2 k8s.gcr.io/kube-proxy:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10 k8s.gcr.io/etcd:3.3.10
+docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
+docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
+```
+
 #### 1. 关闭swap
 ```
 echo 'swapoff -a' >> /etc/profile
@@ -35,10 +68,9 @@ net.ipv4.ip_nonlocal_bind = 1
 net.ipv4.ip_forward = 1
 vm.swappiness=0
 EOF
-```
-#### 6. 
-```
+
 sysctl --system
+
 ```
 #### 7. 
 ```
@@ -49,10 +81,9 @@ modprobe -- ip_vs_wrr
 modprobe -- ip_vs_sh
 modprobe -- nf_conntrack_ipv4
 EOF
-```
-#### 8. 
-```
+
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
+
 ```
 #### 9. 
 ```
@@ -61,9 +92,7 @@ yum install -y keepalived haproxy ipvsadm ipset
 #### 10. 
 ```
 mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
-```
-##### 11. 
-```
+
 nodename=`/bin/hostname`
 cat >/etc/keepalived/keepalived.conf<<END4
 ! Configuration File for keepalived
@@ -85,6 +114,7 @@ vrrp_instance VI_1 {
     }
 }
 END4
+
 ```
 
 ##### 12. 
@@ -118,36 +148,20 @@ listen https-apiserver
         server apiserver02 30.0.2.12:6443 check port 6443 inter 5000 fall 5
         server apiserver03 30.0.2.13:6443 check port 6443 inter 5000 fall 5
 END1
+
 ```
 
 ##### 13. 
 ```
 systemctl enable keepalived && systemctl start keepalived && systemctl status keepalived
+
 ```
 ##### 14. 
 ```
 systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
-```
-##### 15. 
-```
-MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10
-docker pull ${MY_REGISTRY}/k8s-gcr-io-pause:3.1
-docker pull ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1
-
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2 k8s.gcr.io/kube-apiserver:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2 k8s.gcr.io/kube-controller-manager:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2 k8s.gcr.io/kube-scheduler:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2 k8s.gcr.io/kube-proxy:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10 k8s.gcr.io/etcd:3.3.10
-docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
-docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 ```
+
 
 ##### 16.
 ```
@@ -171,9 +185,7 @@ yum install -y kubelet kubeadm kubectl
 ##### 18. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
-```
-##### 19. 
-```
+
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 ```
 ##### 20. 
@@ -223,46 +235,47 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: "ipvs"
 END1
-```
-##### 21. 
-```
+
+
 kubeadm init --config kubeadm-init.yaml
+
 ```
 ##### 22. 
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 ```
 ##### 23. 
 ```
-kubectl get cs
+  kubectl get cs
 kubectl get pod --all-namespaces -o wide
 ```
 ##### 24. 
 ```
-ssh root@MASTER2 "mkdir -p /etc/kubernetes/pki/etcd"
-scp /etc/kubernetes/pki/ca.* root@MASTER2:/etc/kubernetes/pki/
-scp /etc/kubernetes/pki/sa.* root@MASTER2:/etc/kubernetes/pki/
-scp /etc/kubernetes/pki/front-proxy-ca.* root@MASTER2:/etc/kubernetes/pki/
-scp /etc/kubernetes/pki/etcd/ca.* root@MASTER2:/etc/kubernetes/pki/etcd/
-scp /etc/kubernetes/admin.conf root@MASTER2:/etc/kubernetes/
+    ssh root@MASTER2 "mkdir -p /etc/kubernetes/pki/etcd"
+    scp /etc/kubernetes/pki/ca.* root@MASTER2:/etc/kubernetes/pki/
+    scp /etc/kubernetes/pki/sa.* root@MASTER2:/etc/kubernetes/pki/
+    scp /etc/kubernetes/pki/front-proxy-ca.* root@MASTER2:/etc/kubernetes/pki/
+    scp /etc/kubernetes/pki/etcd/ca.* root@MASTER2:/etc/kubernetes/pki/etcd/
+    scp /etc/kubernetes/admin.conf root@MASTER2:/etc/kubernetes/
 
-ssh root@MASTER3 "mkdir -p /etc/kubernetes/pki/etcd"
-scp /etc/kubernetes/pki/ca.* root@MASTER3:/etc/kubernetes/pki/
-scp /etc/kubernetes/pki/sa.* root@MASTER3:/etc/kubernetes/pki/
-scp /etc/kubernetes/pki/front-proxy-ca.* root@MASTER3:/etc/kubernetes/pki/
-scp /etc/kubernetes/pki/etcd/ca.* root@MASTER3:/etc/kubernetes/pki/etcd/
-scp /etc/kubernetes/admin.conf root@MASTER3:/etc/kubernetes/
+    ssh root@MASTER3 "mkdir -p /etc/kubernetes/pki/etcd"
+    scp /etc/kubernetes/pki/ca.* root@MASTER3:/etc/kubernetes/pki/
+    scp /etc/kubernetes/pki/sa.* root@MASTER3:/etc/kubernetes/pki/
+    scp /etc/kubernetes/pki/front-proxy-ca.* root@MASTER3:/etc/kubernetes/pki/
+    scp /etc/kubernetes/pki/etcd/ca.* root@MASTER3:/etc/kubernetes/pki/etcd/
+    scp /etc/kubernetes/admin.conf root@MASTER3:/etc/kubernetes/
 
-ssh root@MASTER2 "mkdir -p $HOME/.kube"
-scp $HOME/.kube/config root@MASTER2:$HOME/.kube/config
+    ssh root@MASTER2 "mkdir -p $HOME/.kube"
+    scp $HOME/.kube/config root@MASTER2:$HOME/.kube/config
 
-ssh root@MASTER3 "mkdir -p $HOME/.kube"
-scp $HOME/.kube/config root@MASTER3:$HOME/.kube/config
+    ssh root@MASTER3 "mkdir -p $HOME/.kube"
+    scp $HOME/.kube/config root@MASTER3:$HOME/.kube/config
 
-ssh root@NODE1 "mkdir -p $HOME/.kube"
-scp $HOME/.kube/config root@NODE1:$HOME/.kube/config
+    ssh root@NODE1 "mkdir -p $HOME/.kube"
+    scp $HOME/.kube/config root@NODE1:$HOME/.kube/config
 ```
 ##### 25. 
 ```
@@ -274,7 +287,7 @@ kubectl apply -f kube-flannel.yml
 ```
 ##### 27. 
 ```
-kubectl get nodes
+  kubectl get nodes
 kubectl -n kube-system get pod -o wide
 ```
 
@@ -286,14 +299,34 @@ kubectl -n kube-system get pod -o wide
 
 # master2/3(4....)
 
+##### 15. 
+```
+MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
+
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2
+docker pull ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10
+docker pull ${MY_REGISTRY}/k8s-gcr-io-pause:3.1
+docker pull ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1
+
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2 k8s.gcr.io/kube-apiserver:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2 k8s.gcr.io/kube-controller-manager:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2 k8s.gcr.io/kube-scheduler:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2 k8s.gcr.io/kube-proxy:v1.14.2
+docker tag ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10 k8s.gcr.io/etcd:3.3.10
+docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
+docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
+```
 
 
-#### 1. 关闭swap
+##### 1. 关闭swap
 ```
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
-#### 2. 设置hosts
+##### 2. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
 30.0.2.11 master1
@@ -302,6 +335,14 @@ cat >>/etc/hosts<<EOF
 30.0.2.14 node1
 EOF
 ```
+
+##### 4. 
+```
+mkdir /root/.ssh
+chmod 700 /root/.ssh
+scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+```
+
 #### 3. 
 ```
 mkdir -p /etc/kubernetes/pki/etcd
@@ -313,14 +354,10 @@ scp root@master1:/etc/kubernetes/admin.conf /etc/kubernetes/
 
 mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
+
 ```
 
-#### 4. 
-```
-mkdir /root/.ssh
-chmod 700 /root/.ssh
-scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
-```
+
 #### 5. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
@@ -330,10 +367,9 @@ net.ipv4.ip_nonlocal_bind = 1
 net.ipv4.ip_forward = 1
 vm.swappiness=0
 EOF
-```
-#### 6. 
-```
+
 sysctl --system
+
 ```
 #### 7. 
 ```
@@ -344,21 +380,20 @@ modprobe -- ip_vs_wrr
 modprobe -- ip_vs_sh
 modprobe -- nf_conntrack_ipv4
 EOF
-```
-#### 8. 
-```
+
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
+
 ```
 #### 9. 
 ```
 yum install -y keepalived haproxy ipvsadm ipset
+
 ```
+
 #### 10. 
 ```
 mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
-```
-##### 11. 
-```
+
 nodename=`/bin/hostname`
 cat >/etc/keepalived/keepalived.conf<<END4
 ! Configuration File for keepalived
@@ -380,6 +415,7 @@ vrrp_instance VI_1 {
     }
 }
 END4
+
 ```
 
 ##### 12. 
@@ -413,6 +449,7 @@ listen https-apiserver
         server apiserver02 30.0.2.12:6443 check port 6443 inter 5000 fall 5
         server apiserver03 30.0.2.13:6443 check port 6443 inter 5000 fall 5
 END1
+
 ```
 
 ##### 13. 
@@ -423,26 +460,7 @@ systemctl enable keepalived && systemctl start keepalived && systemctl status ke
 ```
 systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
 ```
-##### 15. 
-```
-MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10
-docker pull ${MY_REGISTRY}/k8s-gcr-io-pause:3.1
-docker pull ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1
-
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2 k8s.gcr.io/kube-apiserver:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2 k8s.gcr.io/kube-controller-manager:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2 k8s.gcr.io/kube-scheduler:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2 k8s.gcr.io/kube-proxy:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10 k8s.gcr.io/etcd:3.3.10
-docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
-docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
-```
 
 ##### 16.
 ```
@@ -455,32 +473,25 @@ gpgcheck=0
 repo_gpgcheck=0
 gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
-```
 
-##### 17. 
-```
 yum makecache fast
 yum install -y kubelet kubeadm kubectl
+
 ```
 
 ##### 18. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
-```
-##### 19. 
-```
-systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
-```
 
-##### 23. 
-```
-kubectl get cs
-kubectl get pod --all-namespaces -o wide
+systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
+
 ```
 ##### 27. 
 ```
+kubectl get cs
 kubectl get nodes
 kubectl -n kube-system get pod -o wide
+kubectl get pod --all-namespaces -o wide
 ```
 
 
