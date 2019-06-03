@@ -4,7 +4,7 @@
 
 
 # 前言
-本文档以3台master节点+1台node节点为例
+本文档以3台master节点+1台node节点为例，首先每台机器都要装好docker并启动了服务
 详细如下：
 ```
 30.0.2.11 master1
@@ -14,12 +14,12 @@
 ```
 
 # master1
-##### 
+##### 1. 安装wget
 ```
 yum install -y wget
 ```
 
-##### 15. 
+##### 2. 提前下载需要的k8s docker images
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
@@ -40,12 +40,12 @@ docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
 docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 ```
 
-#### 1. 关闭swap
+#### 3. 关闭swap
 ```
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
-#### 2. 设置hosts
+#### 4. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
 30.0.2.11 master1
@@ -54,17 +54,12 @@ cat >>/etc/hosts<<EOF
 30.0.2.14 node1
 EOF
 ```
-#### 3. 生成公钥与私钥对
+#### 5. 生成公钥与私钥对
 ```
 ssh-keygen -t rsa
 ```
-      #### 4. 
-      ```
-      ssh-copy-id MASTER2
-      ssh-copy-id MASTER3
-      ssh-copy-id NODE1
-      ```
-#### 5. 
+
+#### 6. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -90,11 +85,11 @@ EOF
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 
 ```
-#### 9. 
+#### 8. 安装keepalived+haproxy
 ```
 yum install -y keepalived haproxy ipvsadm ipset
 ```
-#### 10. 
+#### 9. 
 ```
 mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
 
@@ -109,7 +104,7 @@ vrrp_instance VI_1 {
     interface enp0s3
     virtual_router_id 88
     advert_int 1
-    priority 100         
+    priority 100
     authentication {
         auth_type PASS
         auth_pass 1111
@@ -122,7 +117,7 @@ END4
 
 ```
 
-##### 12. 
+##### 10. 配置haproxy
 ```
 cat >/etc/haproxy/haproxy.cfg<<END1
 global
@@ -156,19 +151,19 @@ END1
 
 ```
 
-##### 13. 
+##### 11. 启动 keepalived
 ```
 systemctl enable keepalived && systemctl start keepalived && systemctl status keepalived
 
 ```
-##### 14. 
+##### 12. 启动 haproxy
 ```
 systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
 
 ```
 
 
-##### 16.
+##### 13. 
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -181,19 +176,19 @@ gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.a
 EOF
 ```
 
-##### 17. 
+##### 14. 安装 kube 组件
 ```
 yum makecache fast
 yum install -y kubelet kubeadm kubectl
 ```
 
-##### 18. 
+##### 15. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 ```
-##### 20. 
+##### 16. 
 ```
 cat >kubeadm-init.yaml<<END1
 apiVersion: kubeadm.k8s.io/v1beta1
@@ -245,52 +240,27 @@ END1
 kubeadm init --config kubeadm-init.yaml
 
 ```
-##### 22. 
+##### 17. 
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ```
-##### 23. 
+##### 18. 
 ```
   kubectl get cs
 kubectl get pod --all-namespaces -o wide
 ```
-##### 24. 
-```
-    ssh root@MASTER2 "mkdir -p /etc/kubernetes/pki/etcd"
-    scp /etc/kubernetes/pki/ca.* root@MASTER2:/etc/kubernetes/pki/
-    scp /etc/kubernetes/pki/sa.* root@MASTER2:/etc/kubernetes/pki/
-    scp /etc/kubernetes/pki/front-proxy-ca.* root@MASTER2:/etc/kubernetes/pki/
-    scp /etc/kubernetes/pki/etcd/ca.* root@MASTER2:/etc/kubernetes/pki/etcd/
-    scp /etc/kubernetes/admin.conf root@MASTER2:/etc/kubernetes/
-
-    ssh root@MASTER3 "mkdir -p /etc/kubernetes/pki/etcd"
-    scp /etc/kubernetes/pki/ca.* root@MASTER3:/etc/kubernetes/pki/
-    scp /etc/kubernetes/pki/sa.* root@MASTER3:/etc/kubernetes/pki/
-    scp /etc/kubernetes/pki/front-proxy-ca.* root@MASTER3:/etc/kubernetes/pki/
-    scp /etc/kubernetes/pki/etcd/ca.* root@MASTER3:/etc/kubernetes/pki/etcd/
-    scp /etc/kubernetes/admin.conf root@MASTER3:/etc/kubernetes/
-
-    ssh root@MASTER2 "mkdir -p $HOME/.kube"
-    scp $HOME/.kube/config root@MASTER2:$HOME/.kube/config
-
-    ssh root@MASTER3 "mkdir -p $HOME/.kube"
-    scp $HOME/.kube/config root@MASTER3:$HOME/.kube/config
-
-    ssh root@NODE1 "mkdir -p $HOME/.kube"
-    scp $HOME/.kube/config root@NODE1:$HOME/.kube/config
-```
-##### 25. 
+##### 19. 
 ```
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
-##### 26. 
+##### 20. 
 ```
 kubectl apply -f kube-flannel.yml
 ```
-##### 27. 
+##### 21. 
 ```
   kubectl get nodes
 kubectl -n kube-system get pod -o wide
