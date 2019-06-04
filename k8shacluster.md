@@ -14,11 +14,11 @@
 ```
 
 # master1
+
 ##### 1. 安装wget
 ```
 yum install -y wget
 ```
-
 ##### 2. 提前下载需要的k8s docker images
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
@@ -45,13 +45,22 @@ docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
+
+##### 设置环境IP
+```
+vip=30.0.2.10
+master1=30.0.2.11
+master2=30.0.2.12
+master3=30.0.2.13
+node1=30.0.2.14
+```
 #### 4. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
-30.0.2.11 master1
-30.0.2.12 master2
-30.0.2.13 master3
-30.0.2.14 node1
+${master1} master1
+${master2} master2
+${master3} master3
+${node1} node1
 EOF
 ```
 #### 5. 生成公钥与私钥对
@@ -110,7 +119,7 @@ vrrp_instance VI_1 {
         auth_pass 1111
     }
     virtual_ipaddress {
-      30.0.2.10/24
+      ${vip}/24
     }
 }
 END4
@@ -138,15 +147,15 @@ defaults
         option redispatch
  
 listen https-apiserver
-        bind 30.0.2.10:8443
+        bind ${vip}:8443
         mode tcp
         balance roundrobin
         timeout server 15s
         timeout connect 15s
  
-        server apiserver01 30.0.2.11:6443 check port 6443 inter 5000 fall 5
-        server apiserver02 30.0.2.12:6443 check port 6443 inter 5000 fall 5
-        server apiserver03 30.0.2.13:6443 check port 6443 inter 5000 fall 5
+        server apiserver01 ${master1}:6443 check port 6443 inter 5000 fall 5
+        server apiserver02 ${master2}:6443 check port 6443 inter 5000 fall 5
+        server apiserver03 ${master3}:6443 check port 6443 inter 5000 fall 5
 END1
 
 ```
@@ -202,7 +211,7 @@ bootstrapTokens:
   - authentication
 kind: InitConfiguration
 localAPIEndpoint:
-  advertiseAddress: 30.0.2.11
+  advertiseAddress: ${master1}
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
@@ -217,7 +226,7 @@ apiServer:
   timeoutForControlPlane: 4m0s
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
-controlPlaneEndpoint: "30.0.2.10:6443"
+controlPlaneEndpoint: "${vip}:6443"
 dns:
   type: CoreDNS
 etcd:
@@ -301,16 +310,25 @@ docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
+
+##### 设置环境IP
+```
+vip=30.0.2.10
+master1=30.0.2.11
+master2=30.0.2.12
+master3=30.0.2.13
+node1=30.0.2.14
+```
+
 ##### 2. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
-30.0.2.11 master1
-30.0.2.12 master2
-30.0.2.13 master3
-30.0.2.14 node1
+${master1} master1
+${master2} master2
+${master3} master3
+${node1} node1
 EOF
 ```
-
 ##### 4. 
 ```
 mkdir /root/.ssh
@@ -384,7 +402,7 @@ vrrp_instance VI_1 {
         auth_pass 1111
     }
     virtual_ipaddress {
-      30.0.2.10/24
+      ${vip}/24
     }
 }
 END4
@@ -412,15 +430,15 @@ defaults
         option redispatch
  
 listen https-apiserver
-        bind 30.0.2.10:8443
+        bind ${vip}:8443
         mode tcp
         balance roundrobin
         timeout server 15s
         timeout connect 15s
  
-        server apiserver01 30.0.2.11:6443 check port 6443 inter 5000 fall 5
-        server apiserver02 30.0.2.12:6443 check port 6443 inter 5000 fall 5
-        server apiserver03 30.0.2.13:6443 check port 6443 inter 5000 fall 5
+        server apiserver01 ${master1}:6443 check port 6443 inter 5000 fall 5
+        server apiserver02 ${master2}:6443 check port 6443 inter 5000 fall 5
+        server apiserver03 ${master3}:6443 check port 6443 inter 5000 fall 5
 END1
 
 ```
@@ -486,13 +504,21 @@ kubectl get pod --all-namespaces -o wide
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
+##### 设置环境IP
+```
+vip=30.0.2.10
+master1=30.0.2.11
+master2=30.0.2.12
+master3=30.0.2.13
+node1=30.0.2.14
+```
 #### 2. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
-30.0.2.11 MASTER1
-30.0.2.12 MASTER2
-30.0.2.13 MASTER3
-30.0.2.14 NODE1
+${master1} MASTER1
+${master2} MASTER2
+${master3} MASTER3
+${node1} NODE1
 EOF
 ```
 #### 3. 
