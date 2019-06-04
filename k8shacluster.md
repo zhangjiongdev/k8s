@@ -15,6 +15,8 @@
 
 # master1
 
+#### 每台机器都要装好docker并启动了服务
+
 ##### 1. 安装wget
 ```
 yum install -y wget
@@ -283,6 +285,8 @@ kubectl -n kube-system get pod -o wide
 
 # master2/3(4....)
 
+#### 每台机器都要装好docker并启动了服务
+
 ##### 15. 
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
@@ -498,6 +502,8 @@ kubectl get pod --all-namespaces -o wide
 
 
 # node1(2,3,...)
+
+#### 每台机器都要装好docker并启动了服务
 
 #### 1. 关闭swap
 ```
