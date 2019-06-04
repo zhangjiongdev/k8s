@@ -495,13 +495,13 @@ cat >>/etc/hosts<<EOF
 30.0.2.14 NODE1
 EOF
 ```
-#### 4. 
+#### 3. 
 ```
 mkdir /root/.ssh
 chmod 700 /root/.ssh
 scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
-#### 5. 
+#### 4. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -511,11 +511,11 @@ net.ipv4.ip_forward = 1
 vm.swappiness=0
 EOF
 ```
-#### 6. 
+#### 5. 
 ```
 sysctl --system
 ```
-#### 7. 
+#### 6. 
 ```
 cat > /etc/sysconfig/modules/ipvs.modules <<EOF
 modprobe -- ip_vs
@@ -525,12 +525,12 @@ modprobe -- ip_vs_sh
 modprobe -- nf_conntrack_ipv4
 EOF
 ```
-#### 8. 
+#### 7. 
 ```
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 ```
 
-##### 15. 
+##### 8. 
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
@@ -551,7 +551,7 @@ docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
 docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 ```
 
-##### 16.
+##### 9.
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -564,24 +564,24 @@ gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.a
 EOF
 ```
 
-##### 17. 
+##### 10. 
 ```
 yum makecache fast
 yum install -y kubelet kubeadm kubectl
 
 ```
 
-##### 18. 
+##### 11. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 ```
-##### 19. 
+##### 12. 
 ```
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 ```
 
-##### 23. 
+##### 13. 
 ```
 mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
