@@ -31,6 +31,7 @@ docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2
 docker pull ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10
 docker pull ${MY_REGISTRY}/k8s-gcr-io-pause:3.1
 docker pull ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1
+docker pull jmgao1983/flannel:v0.11.0-amd64
 docker pull quay.io/coreos/flannel:v0.11.0-amd64
 
 docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2 k8s.gcr.io/kube-apiserver:v1.14.2
@@ -298,6 +299,7 @@ docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2
 docker pull ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10
 docker pull ${MY_REGISTRY}/k8s-gcr-io-pause:3.1
 docker pull ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1
+docker pull jmgao1983/flannel:v0.11.0-amd64
 docker pull quay.io/coreos/flannel:v0.11.0-amd64
 
 docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2 k8s.gcr.io/kube-apiserver:v1.14.2
