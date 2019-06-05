@@ -477,10 +477,7 @@ yum install -y kubelet kubeadm kubectl
 ##### 15. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
-
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
-
-
 
 ```
 ##### 16. 
