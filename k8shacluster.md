@@ -287,7 +287,7 @@ kubectl -n kube-system get pod -o wide
 
 #### 每台机器都要装好docker并启动了服务
 
-##### 15. 
+##### 1. 
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
@@ -309,13 +309,13 @@ docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 ```
 
 
-##### 1. 关闭swap
+##### 2. 关闭swap
 ```
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
 
-##### 设置环境IP
+##### 3. 设置环境IP
 ```
 vip=30.0.2.10
 master1=30.0.2.11
@@ -324,7 +324,7 @@ master3=30.0.2.13
 node1=30.0.2.14
 ```
 
-##### 2. 设置hosts
+##### 4. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
 ${master1} master1
@@ -333,14 +333,14 @@ ${master3} master3
 ${node1} node1
 EOF
 ```
-##### 4. 
+##### 5. 
 ```
 mkdir /root/.ssh
 chmod 700 /root/.ssh
 scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
 
-#### 3. 
+#### 6. 
 ```
 mkdir -p /etc/kubernetes/pki/etcd
 scp root@master1:/etc/kubernetes/pki/\{ca.*,sa.*,front-proxy-ca.*\} /etc/kubernetes/pki/
@@ -353,7 +353,7 @@ scp root@master1:$HOME/.kube/config $HOME/.kube/config
 ```
 
 
-#### 5. 
+#### 7. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -366,7 +366,7 @@ EOF
 sysctl --system
 
 ```
-#### 7. 
+#### 8. 
 ```
 cat > /etc/sysconfig/modules/ipvs.modules <<EOF
 modprobe -- ip_vs
@@ -413,7 +413,7 @@ END4
 
 ```
 
-##### 12. 
+##### 11. 
 ```
 cat >/etc/haproxy/haproxy.cfg<<END1
 global
@@ -447,17 +447,17 @@ END1
 
 ```
 
-##### 13. 
+##### 12. 
 ```
 systemctl enable keepalived && systemctl start keepalived && systemctl status keepalived
 ```
-##### 14. 
+##### 13. 
 ```
 systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
 ```
 
 
-##### 16.
+##### 14.
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -474,7 +474,7 @@ yum install -y kubelet kubeadm kubectl
 
 ```
 
-##### 18. 
+##### 15. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
@@ -483,7 +483,7 @@ systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 
 
 ```
-##### 27. 
+##### 16. 
 ```
 
 kubeadm join ...
