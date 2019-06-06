@@ -56,6 +56,7 @@ master1=30.0.2.11
 master2=30.0.2.12
 master3=30.0.2.13
 node1=30.0.2.14
+netswitch=`ifconfig | grep 'UP,BROADCAST,RUNNING,MULTICAST' | awk -F: '{print $1}'`
 ```
 #### 4. 设置hosts
 ```
@@ -113,7 +114,7 @@ global_defs {
 }
 vrrp_instance VI_1 {
     state MASTER
-    interface enp0s3
+    interface ${netswitch}
     virtual_router_id 88
     advert_int 1
     priority 100
@@ -325,6 +326,7 @@ master1=30.0.2.11
 master2=30.0.2.12
 master3=30.0.2.13
 node1=30.0.2.14
+netswitch=`ifconfig | grep 'UP,BROADCAST,RUNNING,MULTICAST' | awk -F: '{print $1}'`
 ```
 
 ##### 4. 设置hosts
@@ -400,7 +402,7 @@ global_defs {
 }
 vrrp_instance VI_1 {
     state MASTER
-    interface enp0s3
+    interface ${netswitch}
     virtual_router_id 88
     advert_int 1
     priority 90
