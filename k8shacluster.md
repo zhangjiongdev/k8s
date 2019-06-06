@@ -512,7 +512,7 @@ kubectl get pod --all-namespaces -o wide
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
-##### 设置环境IP
+#### 2. 设置环境IP
 ```
 vip=30.0.2.10
 master1=30.0.2.11
@@ -520,7 +520,7 @@ master2=30.0.2.12
 master3=30.0.2.13
 node1=30.0.2.14
 ```
-#### 2. 设置hosts
+#### 3. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
 ${master1} MASTER1
@@ -529,13 +529,13 @@ ${master3} MASTER3
 ${node1} NODE1
 EOF
 ```
-#### 3. 
+#### 4. 
 ```
 mkdir /root/.ssh
 chmod 700 /root/.ssh
 scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
-#### 4. 
+#### 5. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -544,10 +544,9 @@ net.ipv4.ip_nonlocal_bind = 1
 net.ipv4.ip_forward = 1
 vm.swappiness=0
 EOF
-```
-#### 5. 
-```
+
 sysctl --system
+
 ```
 #### 6. 
 ```
@@ -558,13 +557,12 @@ modprobe -- ip_vs_wrr
 modprobe -- ip_vs_sh
 modprobe -- nf_conntrack_ipv4
 EOF
-```
-#### 7. 
-```
+
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
+
 ```
 
-##### 8. 
+#### 7. 
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
@@ -585,7 +583,7 @@ docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
 docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 ```
 
-##### 9.
+#### 8.
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -596,33 +594,27 @@ gpgcheck=0
 repo_gpgcheck=0
 gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
-```
 
-##### 10. 
-```
 yum makecache fast
 yum install -y kubelet kubeadm kubectl
 
 ```
 
-##### 11. 
+#### 9. 
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
-```
-##### 12. 
-```
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
+
 ```
 
-##### 13. 
+##### 10. 
 ```
 mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
 
+kubeadm join ...
 
 kubectl get cs
 kubectl get pod --all-namespaces -o wide
 ```
-
-
