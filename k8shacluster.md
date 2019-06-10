@@ -176,7 +176,7 @@ systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
 ```
 
 
-##### 13. 
+##### 13. 设置k8s repo
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -195,13 +195,13 @@ yum makecache fast
 yum install -y kubelet kubeadm kubectl
 ```
 
-##### 15. 
+##### 15.  这是cgroupfs
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 ```
-##### 16. 
+##### 16. 设置初始化位置文件
 ```
 cat >kubeadm-init.yaml<<END1
 apiVersion: kubeadm.k8s.io/v1beta1
@@ -253,27 +253,27 @@ END1
 kubeadm init --config kubeadm-init.yaml
 
 ```
-##### 17. 
+##### 17. 设置kube config
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ```
-##### 18. 
+##### 18. 查看容器
 ```
   kubectl get cs
 kubectl get pod --all-namespaces -o wide
 ```
-##### 19. 
+##### 19. 下载flannel配置
 ```
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
-##### 20. 
+##### 20. 应用flannel
 ```
 kubectl apply -f kube-flannel.yml
 ```
-##### 21. 
+##### 21. 查看容器
 ```
   kubectl get nodes
 kubectl -n kube-system get pod -o wide
@@ -338,14 +338,14 @@ ${master3} master3
 ${node1} node1
 EOF
 ```
-##### 5. 
+##### 5. 复制公钥
 ```
 mkdir /root/.ssh
 chmod 700 /root/.ssh
 scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
 
-#### 6. 
+#### 6. 复制 ca 
 ```
 mkdir -p /etc/kubernetes/pki/etcd
 scp root@master1:/etc/kubernetes/pki/\{ca.*,sa.*,front-proxy-ca.*\} /etc/kubernetes/pki/
@@ -358,7 +358,7 @@ scp root@master1:$HOME/.kube/config $HOME/.kube/config
 ```
 
 
-#### 7. 
+#### 7. 配置k8s.conf
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -371,7 +371,7 @@ EOF
 sysctl --system
 
 ```
-#### 8. 
+#### 8. 配置ipvs
 ```
 cat > /etc/sysconfig/modules/ipvs.modules <<EOF
 modprobe -- ip_vs
@@ -384,13 +384,13 @@ EOF
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 
 ```
-#### 9. 
+#### 9. 安装keepalived haproxy
 ```
 yum install -y keepalived haproxy ipvsadm ipset
 
 ```
 
-#### 10. 
+#### 10. 配置keepalive
 ```
 mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
 
@@ -418,7 +418,7 @@ END4
 
 ```
 
-##### 11. 
+##### 11. 配置haproxy
 ```
 cat >/etc/haproxy/haproxy.cfg<<END1
 global
@@ -452,17 +452,17 @@ END1
 
 ```
 
-##### 12. 
+##### 12. 启动keepalived
 ```
 systemctl enable keepalived && systemctl start keepalived && systemctl status keepalived
 ```
-##### 13. 
+##### 13. 启动haproxy
 ```
 systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
 ```
 
 
-##### 14.
+##### 14. 设置k8s repo
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -479,13 +479,13 @@ yum install -y kubelet kubeadm kubectl
 
 ```
 
-##### 15. 
+##### 15. 设置cgroupfs
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 
 ```
-##### 16. 
+##### 16. 加入集群
 ```
 
 (master)
@@ -531,13 +531,13 @@ ${master3} MASTER3
 ${node1} NODE1
 EOF
 ```
-#### 4. 
+#### 4. 复制公钥
 ```
 mkdir /root/.ssh
 chmod 700 /root/.ssh
 scp root@master1:/root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ```
-#### 5. 
+#### 5. 设置k8s.conf
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -550,7 +550,7 @@ EOF
 sysctl --system
 
 ```
-#### 6. 
+#### 6. 配置ipvs
 ```
 cat > /etc/sysconfig/modules/ipvs.modules <<EOF
 modprobe -- ip_vs
@@ -564,7 +564,7 @@ chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipv
 
 ```
 
-#### 7. 
+#### 7. 下载容器镜像
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
@@ -578,7 +578,7 @@ docker tag jmgao1983/flannel:v0.11.0-amd64 quay.io/coreos/flannel:v0.11.0-amd64
 
 ```
 
-#### 8.
+#### 8. 设置k8s repo
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -595,7 +595,7 @@ yum install -y kubelet kubeadm kubectl
 
 ```
 
-#### 9. 
+#### 9. 设置cgroupfs
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
@@ -603,7 +603,7 @@ systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 
 ```
 
-##### 10. 
+##### 10. 设置kube config文件
 ```
 mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
