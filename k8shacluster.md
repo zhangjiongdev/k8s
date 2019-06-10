@@ -16,11 +16,11 @@
 
 #### 每台机器都要装好docker并启动了服务
 
-##### 1. 安装wget
+#### 1. 安装wget
 ```
 yum install -y wget
 ```
-##### 2. 提前下载需要的k8s docker images
+#### 2. 提前下载需要的k8s docker images
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
@@ -49,7 +49,7 @@ echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
 
-##### 设置环境IP
+#### 4. 设置环境IP
 ```
 vip=30.0.2.10
 master1=30.0.2.11
@@ -58,7 +58,7 @@ master3=30.0.2.13
 node1=30.0.2.14
 netswitch=`ifconfig | grep 'UP,BROADCAST,RUNNING,MULTICAST' | awk -F: '{print $1}'`
 ```
-#### 4. 设置hosts
+#### 5. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
 ${master1} master1
@@ -67,12 +67,12 @@ ${master3} master3
 ${node1} node1
 EOF
 ```
-#### 5. 生成公钥与私钥对
+#### 6. 生成公钥与私钥对
 ```
 ssh-keygen -t rsa
 ```
 
-#### 6. 
+#### 7. 
 ```
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -85,7 +85,7 @@ EOF
 sysctl --system
 
 ```
-#### 7. 
+#### 8. 
 ```
 cat > /etc/sysconfig/modules/ipvs.modules <<EOF
 modprobe -- ip_vs
@@ -98,11 +98,11 @@ EOF
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 
 ```
-#### 8. 安装keepalived+haproxy
+#### 9. 安装keepalived+haproxy
 ```
 yum install -y keepalived haproxy ipvsadm ipset
 ```
-#### 9. 
+#### 10. 
 ```
 mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.bak
 
@@ -130,7 +130,7 @@ END4
 
 ```
 
-##### 10. 配置haproxy
+#### 11. 配置haproxy
 ```
 cat >/etc/haproxy/haproxy.cfg<<END1
 global
@@ -164,19 +164,19 @@ END1
 
 ```
 
-##### 11. 启动 keepalived
+#### 12. 启动 keepalived
 ```
 systemctl enable keepalived && systemctl start keepalived && systemctl status keepalived
 
 ```
-##### 12. 启动 haproxy
+#### 13. 启动 haproxy
 ```
 systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
 
 ```
 
 
-##### 13. 设置k8s repo
+#### 14. 设置k8s repo
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -189,19 +189,19 @@ gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.a
 EOF
 ```
 
-##### 14. 安装 kube 组件
+#### 15. 安装 kube 组件
 ```
 yum makecache fast
 yum install -y kubelet kubeadm kubectl
 ```
 
-##### 15.  这是cgroupfs
+#### 16.  这是cgroupfs
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 ```
-##### 16. 设置初始化位置文件
+#### 17. 设置初始化位置文件
 ```
 cat >kubeadm-init.yaml<<END1
 apiVersion: kubeadm.k8s.io/v1beta1
@@ -253,27 +253,27 @@ END1
 kubeadm init --config kubeadm-init.yaml
 
 ```
-##### 17. 设置kube config
+#### 18. 设置kube config
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ```
-##### 18. 查看容器
+#### 19. 查看容器
 ```
   kubectl get cs
 kubectl get pod --all-namespaces -o wide
 ```
-##### 19. 下载flannel配置
+#### 20. 下载flannel配置
 ```
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
-##### 20. 应用flannel
+#### 21. 应用flannel
 ```
 kubectl apply -f kube-flannel.yml
 ```
-##### 21. 查看容器
+#### 22. 查看容器
 ```
   kubectl get nodes
 kubectl -n kube-system get pod -o wide
@@ -286,7 +286,7 @@ kubectl -n kube-system get pod -o wide
 
 #### 每台机器都要装好docker并启动了服务
 
-##### 1. 
+#### 1. 下载容器镜像
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
@@ -310,13 +310,13 @@ docker tag jmgao1983/flannel:v0.11.0-amd64 quay.io/coreos/flannel:v0.11.0-amd64
 ```
 
 
-##### 2. 关闭swap
+#### 2. 关闭swap
 ```
 echo 'swapoff -a' >> /etc/profile
 source /etc/profile
 ```
 
-##### 3. 设置环境IP
+#### 3. 设置环境IP
 ```
 vip=30.0.2.10
 master1=30.0.2.11
@@ -326,7 +326,7 @@ node1=30.0.2.14
 netswitch=`ifconfig | grep 'UP,BROADCAST,RUNNING,MULTICAST' | awk -F: '{print $1}'`
 ```
 
-##### 4. 设置hosts
+#### 4. 设置hosts
 ```
 cat >>/etc/hosts<<EOF
 ${master1} master1
@@ -335,7 +335,7 @@ ${master3} master3
 ${node1} node1
 EOF
 ```
-##### 5. 复制公钥
+#### 5. 复制公钥
 ```
 mkdir /root/.ssh
 chmod 700 /root/.ssh
@@ -353,7 +353,6 @@ mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
 
 ```
-
 
 #### 7. 配置k8s.conf
 ```
@@ -415,7 +414,7 @@ END4
 
 ```
 
-##### 11. 配置haproxy
+#### 11. 配置haproxy
 ```
 cat >/etc/haproxy/haproxy.cfg<<END1
 global
@@ -449,17 +448,17 @@ END1
 
 ```
 
-##### 12. 启动keepalived
+#### 12. 启动keepalived
 ```
 systemctl enable keepalived && systemctl start keepalived && systemctl status keepalived
 ```
-##### 13. 启动haproxy
+#### 13. 启动haproxy
 ```
 systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
 ```
 
 
-##### 14. 设置k8s repo
+#### 14. 设置k8s repo
 ```
 cat << EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -476,13 +475,13 @@ yum install -y kubelet kubeadm kubectl
 
 ```
 
-##### 15. 设置cgroupfs
+#### 15. 设置cgroupfs
 ```
 echo  'Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' >> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 
 ```
-##### 16. 加入集群
+#### 16. 加入集群
 ```
 
 (master)
@@ -600,7 +599,7 @@ systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 
 ```
 
-##### 10. 设置kube config文件
+#### 10. 设置kube config文件
 ```
 mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
