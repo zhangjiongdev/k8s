@@ -488,7 +488,9 @@ systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 ##### 16. 
 ```
 
-kubeadm join ...
+(master)
+kubeadm token create --print-join-command
+kubeadm join ...  --experimental-control-plane
 
 kubectl get cs
 kubectl get nodes
@@ -606,6 +608,8 @@ systemctl enable kubelet && systemctl start kubelet && systemctl status kubelet
 mkdir -p $HOME/.kube
 scp root@master1:$HOME/.kube/config $HOME/.kube/config
 
+（master）
+kubeadm token create --print-join-command
 kubeadm join ...
 
 kubectl get cs
