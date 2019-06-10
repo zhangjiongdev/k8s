@@ -566,23 +566,14 @@ chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipv
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
 
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2
 docker pull ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2
-docker pull ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10
 docker pull ${MY_REGISTRY}/k8s-gcr-io-pause:3.1
-docker pull ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1
 docker pull jmgao1983/flannel:v0.11.0-amd64
 
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-apiserver:v1.14.2 k8s.gcr.io/kube-apiserver:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-controller-manager:v1.14.2 k8s.gcr.io/kube-controller-manager:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-scheduler:v1.14.2 k8s.gcr.io/kube-scheduler:v1.14.2
 docker tag ${MY_REGISTRY}/k8s-gcr-io-kube-proxy:v1.14.2 k8s.gcr.io/kube-proxy:v1.14.2
-docker tag ${MY_REGISTRY}/k8s-gcr-io-etcd:3.3.10 k8s.gcr.io/etcd:3.3.10
 docker tag ${MY_REGISTRY}/k8s-gcr-io-pause:3.1 k8s.gcr.io/pause:3.1
-docker tag ${MY_REGISTRY}/k8s-gcr-io-coredns:1.3.1 k8s.gcr.io/coredns:1.3.1
 docker tag jmgao1983/flannel:v0.11.0-amd64 quay.io/coreos/flannel:v0.11.0-amd64
+
 ```
 
 #### 8.
