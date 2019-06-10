@@ -282,9 +282,6 @@ kubectl -n kube-system get pod -o wide
 
 
 
-
-
-
 # master2/3(4....)
 
 #### 每台机器都要装好docker并启动了服务
