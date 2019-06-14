@@ -1,3 +1,14 @@
+部署环境
+```
+台式电脑：
+CPU：Intel i7
+内存：16GB
+OS：64位 Windows 10 专业版
+虚机软件：VirtualBox 6.0.8
+CentOS-7-x86_64-DVD-1810.iso
+```
+
+
 VirtualBox
 ```
 主页
