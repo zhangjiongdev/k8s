@@ -12,7 +12,7 @@ CPU：Intel i7
 
 VirtualBox and CentOS
 ```
-主页
+VirtualBox 主页
 www.virtualbox.org
 
 VirtualBox-6.0.8-130520-Win.exe
@@ -21,7 +21,10 @@ https://download.virtualbox.org/virtualbox/6.0.8/VirtualBox-6.0.8-130520-Win.exe
 Oracle_VM_VirtualBox_Extension_Pack-6.0.8.vbox-extpack
 https://download.virtualbox.org/virtualbox/6.0.8/Oracle_VM_VirtualBox_Extension_Pack-6.0.8.vbox-extpack
 
-CentOS
+CentOS 主页
+https://www.centos.org
+
+CentOS-7-x86_64-DVD-1810.iso
 http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso
 ```
 
