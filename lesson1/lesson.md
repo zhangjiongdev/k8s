@@ -4,6 +4,7 @@
 CPU：Intel i7
 内存：16GB
 操作系统：64位 Windows 10 专业版
+
 虚机软件：VirtualBox 6.0.8
 虚机操作系统镜像：CentOS-7-x86_64-DVD-1810.iso
 ```
