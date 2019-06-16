@@ -61,7 +61,12 @@ END1
 
 启动 keepalived 和 haproxy
 ```
-systemctl enable keepalived && systemctl start keepalived && systemctl status keepalived
+systemctl enable keepalived && systemctl start keepalived 
 
-systemctl enable haproxy && systemctl start haproxy && systemctl status haproxy
+systemctl enable haproxy && systemctl start haproxy 
+
+```
+检查
+```
+ping 30.0.2.10
 ```
