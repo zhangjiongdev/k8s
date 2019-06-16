@@ -1,4 +1,4 @@
-```
+
 下载需要的k8s docker images
 ```
 MY_REGISTRY=registry.cn-hangzhou.aliyuncs.com/openthings
