@@ -36,3 +36,21 @@ VirtualBox 导入 Extension_Pack
 菜单：
 管理 >> 全局设定 >> 扩展 >> 添加新包 >> 选择Oracle_VM_VirtualBox_Extension_Pack-6.0.8.vbox-extpack
 ```
+
+创建NAT网络
+```
+管理 >> 全局设定 >> 网络 >> 添加新NAT网络 >> 编辑NAT网络（新添加的）
+
+修改：
+网络名称：nat30
+网络CIDR：30.0.2.0/24
+支持 DHCP：勾选
+支持 IPv6：勾选
+
+端口转发 >> IPv4
+名称 | 协议 | 主机IP | 主机端口 | 
+master1 | TCP | 0.0.0.0 | 2122 | 30.0.2.11 | 22
+master2 | TCP | 0.0.0.0 | 2222 | 30.0.2.12 | 22
+master3 | TCP | 0.0.0.0 | 2322 | 30.0.2.13 | 22
+node1 | TCP | 0.0.0.0 | 2422 | 30.0.2.14 | 22
+```
