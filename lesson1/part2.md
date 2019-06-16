@@ -41,3 +41,36 @@ VirtualBox 新建虚机
 
 # 没有说明的选项均为默认值
 ```
+
+用root账号登录CentOS
+
+启用网卡
+```
+sed -i "s/ONBOOT=no/ONBOOT=yes/g" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+service network restart
+```
+
+配置CentOS
+```
+停止、禁用防火墙
+systemctl stop firewalld
+systemctl disable firewalld
+```
+
+禁用selinux
+```
+sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/sysconfig/selinux
+```
+
+设置静态IP地址
+```
+hip=30.0.2.11
+sed -i "s/BOOTPROTO=dhcp/BOOTPROTO=static/g" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+cat >>/etc/sysconfig/network-scripts/ifcfg-enp0s3<<EOF
+IPADDR=${hip}
+NETMASK=255.255.255.0
+GATEWAY=30.0.2.1
+DNS1=30.0.2.1
+EOF
+
+```
