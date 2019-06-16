@@ -50,9 +50,9 @@ sed -i "s/ONBOOT=no/ONBOOT=yes/g" /etc/sysconfig/network-scripts/ifcfg-enp0s3
 service network restart
 ```
 
-配置CentOS
+停止、禁用CentOS防火墙
 ```
-停止、禁用防火墙
+
 systemctl stop firewalld
 systemctl disable firewalld
 ```
