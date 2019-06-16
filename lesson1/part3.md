@@ -4,7 +4,7 @@ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
 ```
 
-添加软件源信息：
+添加 docker yum 源信息：
 ```
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 ```
@@ -27,4 +27,6 @@ systemctl start docker && systemctl enable docker
 测试Docker版本
 ```
 docker --version
+
+Docker version 18.09.6, build 481bc77156
 ```
