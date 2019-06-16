@@ -28,6 +28,9 @@ CentOS-7-x86_64-DVD-1810.iso
 http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso
 ```
 
+安装VirtualBox-6.0.8-130520-Win.exe
+
+
 VirtualBox 导入 Extension_Pack
 ```
 菜单：
