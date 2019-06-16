@@ -52,7 +52,6 @@ service network restart
 
 停止、禁用CentOS防火墙
 ```
-
 systemctl stop firewalld
 systemctl disable firewalld
 ```
@@ -73,4 +72,13 @@ GATEWAY=30.0.2.1
 DNS1=30.0.2.1
 EOF
 
+```
+修改主机名
+```
+hostnamectl set-hostname master1
+```
+
+重启服务器
+```
+reboot
 ```
