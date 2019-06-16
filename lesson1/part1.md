@@ -37,7 +37,7 @@ VirtualBox 导入 Extension_Pack
 管理 >> 全局设定 >> 扩展 >> 添加新包 >> 选择Oracle_VM_VirtualBox_Extension_Pack-6.0.8.vbox-extpack
 ```
 
-创建NAT网络
+创建 VirtualBox NAT 网络
 ```
 管理 >> 全局设定 >> 网络 >> 添加新NAT网络 >> 编辑NAT网络（新添加的）
 
