@@ -28,3 +28,8 @@ CentOS-7-x86_64-DVD-1810.iso
 http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso
 ```
 
+VirtualBox 导入 Extension_Pack
+```
+菜单：
+管理 >> 全局设定 >> 扩展 >> 添加新包 >> 选择Oracle_VM_VirtualBox_Extension_Pack-6.0.8.vbox-extpack
+```
