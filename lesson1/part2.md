@@ -61,6 +61,11 @@ systemctl disable firewalld
 sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/sysconfig/selinux
 ```
 
+禁用UseDNS
+```
+sed -i "s/#UseDNS yes/UseDNS no/g" /etc/ssh/sshd_config
+```
+
 设置静态IP地址
 ```
 hip=30.0.2.11
