@@ -21,6 +21,11 @@ spec:
         - containerPort: 80
 EOF
 
+kubectl create -f nginxdeployment.yaml
+
+
+kubectl get pods
+
 ```
 
 
@@ -41,4 +46,11 @@ spec:
     targetPort: 80
   selector:
     app: nginx
+EOF
+
+
+kubectl create -f nginxsvc.yaml
+
+
+kubectl get svc
 ```
