@@ -1,4 +1,4 @@
-nginxdeployment.yaml
+创建nginx无状态容器(2个副本集)
 ```
 cat << EOF > nginxdeployment.yaml
 apiVersion: apps/v1beta1
@@ -29,7 +29,7 @@ kubectl get pods
 ```
 
 
-nginxsvc.yaml
+创建nginx无状态容器的服务，并测试cluster-ip
 ```
 cat << EOF > nginxsvc.yaml
 apiVersion: v1
